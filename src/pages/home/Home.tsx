@@ -59,6 +59,7 @@ const Home = () => {
           <GenreSlider />
         </StSection>
       </StMainWrapper>
+      <Footer />
     </StContainer>
   );
 };
