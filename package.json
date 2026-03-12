@@ -2,6 +2,9 @@
   "name": "todaygame",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "24.x"
+  },
   "dependencies": {
     "@reduxjs/toolkit": "^2.0.1",
     "@supabase/postgrest-js": "^1.9.1",
