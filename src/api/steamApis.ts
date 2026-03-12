@@ -46,6 +46,28 @@ const getSelectedGenre = async (tag: string) => {
   }
 };
 
+type SteamSearchGame = {
+  appid: number;
+  name: string;
+  header_image: string;
+};
+
+const searchGamesByName = async (query: string): Promise<SteamSearchGame[]> => {
+  try {
+    const response = await axios.get(`${serverUrl}/api/genre/${encodeURIComponent(query)}`);
+    const searchedGames = response.data?.applist?.apps;
+
+    if (Array.isArray(searchedGames)) {
+      return searchedGames;
+    }
+
+    return [];
+  } catch (error) {
+    console.error('searchGamesByName fetch 에러: ', error);
+    throw error;
+  }
+};
+
 const getGameDetails = async (appid: number) => {
   try {
     const response = await axios.get(`${serverUrl}/api/game-details/${appid}`);
@@ -63,4 +85,4 @@ const getGameDetails = async (appid: number) => {
   }
 };
 
-export { getMostPlayedGames, getGameDetails, getTopReleases, getSelectedGenre };
+export { getMostPlayedGames, getGameDetails, getTopReleases, getSelectedGenre, searchGamesByName };

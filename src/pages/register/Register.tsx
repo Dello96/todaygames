@@ -29,7 +29,7 @@ import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { supabase } from 'types/supabase';
-import { getGames } from 'api/games';
+import { getGameDetails, searchGamesByName } from 'api/steamApis';
 import { QUERY_KEYS } from 'query/keys';
 import Modal from 'components/register/Modal';
 import { insertPost } from 'api/supabaseData';
@@ -133,13 +133,11 @@ const Register = () => {
     setGameName(e.target.value);
   };
 
-  const { data: allGames } = useQuery({
-    queryKey: [QUERY_KEYS.GAMES],
-    queryFn: getGames,
-    enabled: isModalOpen
+  const { data: searchedGames } = useQuery({
+    queryKey: [QUERY_KEYS.SEARCH, gameName],
+    queryFn: () => searchGamesByName(gameName),
+    enabled: isModalOpen && gameName.trim().length > 0
   });
-
-  const searchedGames = allGames?.filter((game) => game.name.toLowerCase().includes(gameName.toLowerCase()));
 
   const onClickToggleModal = useCallback(() => {
     if (gameName) {
@@ -324,12 +322,16 @@ const Register = () => {
             return (
               <>
                 <GameCard
-                  onClick={() => {
+                  onClick={async () => {
+                    const gameDetail = await getGameDetails(games.appid);
+                    const genreText = gameDetail?.genres
+                      ? gameDetail.genres.map((genre: { description: string }) => genre.description).join(', ')
+                      : '';
                     setGameName(games.name);
-                    setTagText(games.genres);
+                    setTagText(genreText);
                     setIsModalOpen(false);
                   }}
-                  key={games.id}
+                  key={games.appid}
                 >
                   <CardImage src={games.header_image}></CardImage>
 

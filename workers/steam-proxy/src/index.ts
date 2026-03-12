@@ -68,14 +68,18 @@ const handleGameDetails = async (appid: string) => {
 };
 
 const handleGenre = async (tag: string) => {
-  const encodedTag = encodeURIComponent(tag);
+  const decodedTag = decodeURIComponent(tag);
+  const encodedTag = encodeURIComponent(decodedTag);
   const data = await fetchJson(
     `https://store.steampowered.com/api/storesearch/?term=${encodedTag}&l=koreana&cc=KR`
   );
   const apps = Array.isArray(data?.items)
-    ? data.items.map((item: { id: number; name: string }) => ({
+    ? data.items
+        .filter((item: { type?: string }) => item.type === "app")
+        .map((item: { id: number; name: string; tiny_image?: string }) => ({
         appid: item.id,
-        name: item.name
+        name: item.name,
+        header_image: item.tiny_image ?? ""
       }))
     : [];
 
