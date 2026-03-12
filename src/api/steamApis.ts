@@ -1,8 +1,14 @@
 import axios from 'axios';
 
+const serverUrl = process.env.REACT_APP_SERVER_URL;
+
+if (!serverUrl) {
+  throw new Error('REACT_APP_SERVER_URL is not set. Please configure your Cloudflare Worker URL.');
+}
+
 const getMostPlayedGames = async () => {
   try {
-    const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/most-played-games`);
+    const response = await axios.get(`${serverUrl}/api/most-played-games`);
     const mostPlayedGamesData = response.data.response.ranks;
    
     return mostPlayedGamesData;
@@ -14,7 +20,7 @@ const getMostPlayedGames = async () => {
 
 const getTopReleases = async () => {
   try {
-    const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/top-releases`);
+    const response = await axios.get(`${serverUrl}/api/top-releases`);
     const topReleases = response.data.response.pages[0].item_ids;
     return topReleases;
   } catch (error) {
@@ -25,7 +31,7 @@ const getTopReleases = async () => {
 
 const getSelectedGenre = async (tag: string) => {
   try {
-    const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/genre/${tag}`);
+    const response = await axios.get(`${serverUrl}/api/genre/${tag}`);
     const SelectedGenre = response.data.applist.apps;
 
     if (SelectedGenre) {
@@ -42,7 +48,7 @@ const getSelectedGenre = async (tag: string) => {
 
 const getGameDetails = async (appid: number) => {
   try {
-    const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/game-details/${appid}`);
+    const response = await axios.get(`${serverUrl}/api/game-details/${appid}`);
     const gameDetails = response.data[appid]?.data;
 
     if (gameDetails) {

@@ -118,7 +118,7 @@
     
 - **데이터 베이스** 
   - supabase - 사용자 인증과 데이터베이스 등의 서버 기능 제공
-  - Glitch - steamApi 받아오는 서버공간
+  - Cloudflare Workers - Steam API 프록시 서버
 - **Tool & Application**
     - vsCode - 코드 작성을 편리하게해주는 Tool
 - **배포**
