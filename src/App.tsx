@@ -1,5 +1,5 @@
 import AuthenticationLayer from 'AuthenticationLayer';
-import Router from './shared/router';
+import Router from './shared/Router';
 
 function App() {
   return (
